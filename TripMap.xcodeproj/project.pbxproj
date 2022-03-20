@@ -8,15 +8,15 @@
 
 /* Begin PBXBuildFile section */
 		42008E4D279851DE00E591B6 /* Place.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42008E4C279851DE00E591B6 /* Place.swift */; };
+		42308B6527E70152005C505F /* MapboxMaps in Frameworks */ = {isa = PBXBuildFile; productRef = 42308B6427E70152005C505F /* MapboxMaps */; };
 		42DCFDD127981A4000CC02CD /* TripMapApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42DCFDD027981A4000CC02CD /* TripMapApp.swift */; };
 		42DCFDD327981A4000CC02CD /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42DCFDD227981A4000CC02CD /* ContentView.swift */; };
 		42DCFDD527981A4100CC02CD /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 42DCFDD427981A4100CC02CD /* Assets.xcassets */; };
-		42DCFDD827981A4100CC02CD /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 42DCFDD727981A4100CC02CD /* Preview Assets.xcassets */; };
 		42DCFDDA27981A4100CC02CD /* Persistence.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42DCFDD927981A4100CC02CD /* Persistence.swift */; };
 		42DCFDDD27981A4100CC02CD /* TripMap.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 42DCFDDB27981A4100CC02CD /* TripMap.xcdatamodeld */; };
 		42DCFDE627981AF500CC02CD /* Home.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42DCFDE527981AF500CC02CD /* Home.swift */; };
-		42DCFDE827981B0500CC02CD /* MapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42DCFDE727981B0500CC02CD /* MapView.swift */; };
-		42DCFDEC27981C3200CC02CD /* MapViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42DCFDEB27981C3200CC02CD /* MapViewModel.swift */; };
+		42DCFDE827981B0500CC02CD /* MapBoxMapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42DCFDE727981B0500CC02CD /* MapBoxMapView.swift */; };
+		42DCFDEC27981C3200CC02CD /* MapboxMapVeiwModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42DCFDEB27981C3200CC02CD /* MapboxMapVeiwModel.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -25,12 +25,11 @@
 		42DCFDD027981A4000CC02CD /* TripMapApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TripMapApp.swift; sourceTree = "<group>"; };
 		42DCFDD227981A4000CC02CD /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		42DCFDD427981A4100CC02CD /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
-		42DCFDD727981A4100CC02CD /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		42DCFDD927981A4100CC02CD /* Persistence.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Persistence.swift; sourceTree = "<group>"; };
 		42DCFDDC27981A4100CC02CD /* TripMap.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = TripMap.xcdatamodel; sourceTree = "<group>"; };
 		42DCFDE527981AF500CC02CD /* Home.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Home.swift; sourceTree = "<group>"; };
-		42DCFDE727981B0500CC02CD /* MapView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapView.swift; sourceTree = "<group>"; };
-		42DCFDEB27981C3200CC02CD /* MapViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapViewModel.swift; sourceTree = "<group>"; };
+		42DCFDE727981B0500CC02CD /* MapBoxMapView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapBoxMapView.swift; sourceTree = "<group>"; };
+		42DCFDEB27981C3200CC02CD /* MapboxMapVeiwModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapboxMapVeiwModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -38,6 +37,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				42308B6527E70152005C505F /* MapboxMaps in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -50,6 +50,13 @@
 				42008E4C279851DE00E591B6 /* Place.swift */,
 			);
 			path = Model;
+			sourceTree = "<group>";
+		};
+		42308B6627E70775005C505F /* Preview Content */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = "Preview Content";
 			sourceTree = "<group>";
 		};
 		42DCFDC427981A4000CC02CD = {
@@ -71,6 +78,7 @@
 		42DCFDCF27981A4000CC02CD /* TripMap */ = {
 			isa = PBXGroup;
 			children = (
+				42308B6627E70775005C505F /* Preview Content */,
 				42008E4B279851CA00E591B6 /* Model */,
 				42DCFDE427981AE000CC02CD /* ViewModel */,
 				42DCFDE327981ADB00CC02CD /* View */,
@@ -79,24 +87,15 @@
 				42DCFDD427981A4100CC02CD /* Assets.xcassets */,
 				42DCFDD927981A4100CC02CD /* Persistence.swift */,
 				42DCFDDB27981A4100CC02CD /* TripMap.xcdatamodeld */,
-				42DCFDD627981A4100CC02CD /* Preview Content */,
 			);
 			path = TripMap;
-			sourceTree = "<group>";
-		};
-		42DCFDD627981A4100CC02CD /* Preview Content */ = {
-			isa = PBXGroup;
-			children = (
-				42DCFDD727981A4100CC02CD /* Preview Assets.xcassets */,
-			);
-			path = "Preview Content";
 			sourceTree = "<group>";
 		};
 		42DCFDE327981ADB00CC02CD /* View */ = {
 			isa = PBXGroup;
 			children = (
 				42DCFDE527981AF500CC02CD /* Home.swift */,
-				42DCFDE727981B0500CC02CD /* MapView.swift */,
+				42DCFDE727981B0500CC02CD /* MapBoxMapView.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -104,7 +103,7 @@
 		42DCFDE427981AE000CC02CD /* ViewModel */ = {
 			isa = PBXGroup;
 			children = (
-				42DCFDEB27981C3200CC02CD /* MapViewModel.swift */,
+				42DCFDEB27981C3200CC02CD /* MapboxMapVeiwModel.swift */,
 			);
 			path = ViewModel;
 			sourceTree = "<group>";
@@ -125,6 +124,9 @@
 			dependencies = (
 			);
 			name = TripMap;
+			packageProductDependencies = (
+				42308B6427E70152005C505F /* MapboxMaps */,
+			);
 			productName = TripMap;
 			productReference = 42DCFDCD27981A4000CC02CD /* TripMap.app */;
 			productType = "com.apple.product-type.application";
@@ -153,6 +155,9 @@
 				Base,
 			);
 			mainGroup = 42DCFDC427981A4000CC02CD;
+			packageReferences = (
+				42308B6327E70152005C505F /* XCRemoteSwiftPackageReference "mapbox-maps-ios" */,
+			);
 			productRefGroup = 42DCFDCE27981A4000CC02CD /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -167,7 +172,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				42DCFDD827981A4100CC02CD /* Preview Assets.xcassets in Resources */,
 				42DCFDD527981A4100CC02CD /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -180,11 +184,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				42DCFDDA27981A4100CC02CD /* Persistence.swift in Sources */,
-				42DCFDE827981B0500CC02CD /* MapView.swift in Sources */,
+				42DCFDE827981B0500CC02CD /* MapBoxMapView.swift in Sources */,
 				42DCFDDD27981A4100CC02CD /* TripMap.xcdatamodeld in Sources */,
 				42008E4D279851DE00E591B6 /* Place.swift in Sources */,
 				42DCFDE627981AF500CC02CD /* Home.swift in Sources */,
-				42DCFDEC27981C3200CC02CD /* MapViewModel.swift in Sources */,
+				42DCFDEC27981C3200CC02CD /* MapboxMapVeiwModel.swift in Sources */,
 				42DCFDD327981A4000CC02CD /* ContentView.swift in Sources */,
 				42DCFDD127981A4000CC02CD /* TripMapApp.swift in Sources */,
 			);
@@ -393,6 +397,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		42308B6327E70152005C505F /* XCRemoteSwiftPackageReference "mapbox-maps-ios" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/mapbox/mapbox-maps-ios.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 10.3.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		42308B6427E70152005C505F /* MapboxMaps */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 42308B6327E70152005C505F /* XCRemoteSwiftPackageReference "mapbox-maps-ios" */;
+			productName = MapboxMaps;
+		};
+/* End XCSwiftPackageProductDependency section */
 
 /* Begin XCVersionGroup section */
 		42DCFDDB27981A4100CC02CD /* TripMap.xcdatamodeld */ = {

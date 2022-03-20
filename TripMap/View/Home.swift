@@ -6,14 +6,13 @@
 //
 
 import SwiftUI
-import CoreLocation
+import MapKit
+import MapboxMaps
 
 struct Home: View {
     
-    @StateObject var mapData = MapViewModel()
-    
-    @State var locationManager = CLLocationManager()
-    
+    @StateObject var mapData = MapboxMapViewModel()
+            
     @State var isEditing = false
     
     var body: some View {
@@ -21,9 +20,9 @@ struct Home: View {
         ZStack {
             
             // 地圖顯示
-            MapView()
+            MapBoxMapView()
                 .environmentObject(mapData)
-                .ignoresSafeArea(.all, edges: .all)
+                .ignoresSafeArea()
             
             // 搜尋列
             VStack() {
@@ -38,15 +37,6 @@ struct Home: View {
                 
                 // 調整定位、切換地圖按鈕
                 VStack(spacing: 5.0) {
-                    
-                    // 切換地圖按鈕
-                    Button(action: mapData.updateMapType) {
-                        Image(systemName: mapData.mapType == .standard ? "network" : "map")
-                            .font(.title2)
-                            .padding(4.7)
-                            .background(Color.white)
-                            .cornerRadius(10.0)
-                    }
                     
                     // 返回使用者定位按鈕
                     Button(action: mapData.currentLocation) {
@@ -107,18 +97,7 @@ struct Home: View {
             }
             
         }
-        
-        // 開啟ZStack時運作
-        .onAppear(perform: {
-            
-            // 設置委託
-            locationManager.delegate = mapData
-            locationManager.requestWhenInUseAuthorization()
-            
-        })
-        
-        // 處理拒絕定位權限
-        .alert(isPresented: $mapData.permissionDenied) {
+        .alert(isPresented: $mapData.isLocationAuthorizationStatus) {
             
             Alert(title: Text("需要定位權限"), message: Text("請至設定 -> TripMap，將「位置」功能開啟。"), dismissButton: .default(Text("前往設定")) {
                 
@@ -156,7 +135,7 @@ extension View {
 // 搜尋列實作
 struct searchBar: View {
     
-    @StateObject var mapData: MapViewModel
+    @StateObject var mapData: MapboxMapViewModel
     
     @State var isEditing: Bool
     
