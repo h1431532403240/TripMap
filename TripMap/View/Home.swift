@@ -97,6 +97,7 @@ struct Home: View {
             }
             
         }
+        // 檢測是否有給予定位權限，若無傳送警告
         .alert(isPresented: $mapData.isLocationAuthorizationStatus) {
             
             Alert(title: Text("需要定位權限"), message: Text("請至設定 -> TripMap，將「位置」功能開啟。"), dismissButton: .default(Text("前往設定")) {
@@ -107,7 +108,7 @@ struct Home: View {
             })
         }
         
-        // 當搜索文字變動時搜尋
+        // 當搜索文字變動時執行搜尋
         .onChange(of: mapData.searchText, perform: { value in
             
             // 設置延遲時間避免重複搜尋
