@@ -21,6 +21,7 @@
 
 /* Begin PBXFileReference section */
 		42008E4C279851DE00E591B6 /* Place.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Place.swift; sourceTree = "<group>"; };
+		42308B6727E70871005C505F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		42DCFDCD27981A4000CC02CD /* TripMap.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TripMap.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		42DCFDD027981A4000CC02CD /* TripMapApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TripMapApp.swift; sourceTree = "<group>"; };
 		42DCFDD227981A4000CC02CD /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -78,6 +79,7 @@
 		42DCFDCF27981A4000CC02CD /* TripMap */ = {
 			isa = PBXGroup;
 			children = (
+				42308B6727E70871005C505F /* Info.plist */,
 				42308B6627E70775005C505F /* Preview Content */,
 				42008E4B279851CA00E591B6 /* Model */,
 				42DCFDE427981AE000CC02CD /* ViewModel */,
@@ -324,8 +326,9 @@
 				DEVELOPMENT_TEAM = K876B5DF7P;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = TripMap/Info.plist;
 				INFOPLIST_KEY_LSApplicationCategoryType = "";
-				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "Your precise location is used to calculate turn-by-turn directions, show your location on the map, and help improve the map.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -355,8 +358,9 @@
 				DEVELOPMENT_TEAM = K876B5DF7P;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = TripMap/Info.plist;
 				INFOPLIST_KEY_LSApplicationCategoryType = "";
-				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "Your precise location is used to calculate turn-by-turn directions, show your location on the map, and help improve the map.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
