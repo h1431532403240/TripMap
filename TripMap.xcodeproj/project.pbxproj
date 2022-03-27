@@ -17,6 +17,8 @@
 		42DCFDE627981AF500CC02CD /* Home.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42DCFDE527981AF500CC02CD /* Home.swift */; };
 		42DCFDE827981B0500CC02CD /* MapBoxMapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42DCFDE727981B0500CC02CD /* MapBoxMapView.swift */; };
 		42DCFDEC27981C3200CC02CD /* MapboxMapVeiwModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42DCFDEB27981C3200CC02CD /* MapboxMapVeiwModel.swift */; };
+		42E9816927EDEA9100917CEC /* ListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42E9816827EDEA9100917CEC /* ListView.swift */; };
+		42E9816B27EDEE7D00917CEC /* ListModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42E9816A27EDEE7D00917CEC /* ListModel.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -31,6 +33,8 @@
 		42DCFDE527981AF500CC02CD /* Home.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Home.swift; sourceTree = "<group>"; };
 		42DCFDE727981B0500CC02CD /* MapBoxMapView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapBoxMapView.swift; sourceTree = "<group>"; };
 		42DCFDEB27981C3200CC02CD /* MapboxMapVeiwModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapboxMapVeiwModel.swift; sourceTree = "<group>"; };
+		42E9816827EDEA9100917CEC /* ListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListView.swift; sourceTree = "<group>"; };
+		42E9816A27EDEE7D00917CEC /* ListModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -49,6 +53,7 @@
 			isa = PBXGroup;
 			children = (
 				42008E4C279851DE00E591B6 /* Place.swift */,
+				42E9816A27EDEE7D00917CEC /* ListModel.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -98,6 +103,7 @@
 			children = (
 				42DCFDE527981AF500CC02CD /* Home.swift */,
 				42DCFDE727981B0500CC02CD /* MapBoxMapView.swift */,
+				42E9816827EDEA9100917CEC /* ListView.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -193,6 +199,8 @@
 				42DCFDEC27981C3200CC02CD /* MapboxMapVeiwModel.swift in Sources */,
 				42DCFDD327981A4000CC02CD /* ContentView.swift in Sources */,
 				42DCFDD127981A4000CC02CD /* TripMapApp.swift in Sources */,
+				42E9816927EDEA9100917CEC /* ListView.swift in Sources */,
+				42E9816B27EDEE7D00917CEC /* ListModel.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
