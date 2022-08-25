@@ -15,6 +15,8 @@ struct TripMapApp: App {
         WindowGroup {
             ContentView()
                 .environment(\.managedObjectContext, persistenceController.container.viewContext)
+//            ListView()
+//                .environment(\.managedObjectContext, persistenceController.container.viewContext)
         }
     }
 }

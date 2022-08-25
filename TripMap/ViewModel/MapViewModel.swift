@@ -29,6 +29,8 @@ class MapViewModel: NSObject, ObservableObject, CLLocationManagerDelegate {
     // 搜索地點儲存
     @Published var places: [Place] = []
     
+    @Published var centerLocation: CLLocationCoordinate2D?
+    
     // 變更地圖類型
     func updateMapType() {
         
@@ -41,10 +43,18 @@ class MapViewModel: NSObject, ObservableObject, CLLocationManagerDelegate {
         }
     }
     
+    // 獲取地圖中心經緯度
+    func getCenterLocation() {
+        centerLocation = mapView.centerCoordinate
+        print("經度：\(String(describing: centerLocation?.longitude) ), 緯度：\(String(describing: centerLocation?.latitude))")
+    }
+    
     // 前往個人定位
     func currentLocation() {
                 
-        guard let _ = region else { return }
+        guard let userLocation = mapView.userLocation.location?.coordinate else { return }
+        
+        region.center = userLocation
                 
         mapView.setRegion(region, animated: true)
         mapView.setVisibleMapRect(mapView.visibleMapRect, animated: true)

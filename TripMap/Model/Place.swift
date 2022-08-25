@@ -16,9 +16,10 @@ struct Place: Identifiable {
 }
 
 extension CLPlacemark {
+    // 獲取詳細地址
     func getFullAddress() -> String? {
         // 縣市名稱
-        guard let _subAdministrativeArea = subAdministrativeArea else { return "" }
+//        guard let _subAdministrativeArea = subAdministrativeArea else { return "" }
         // 市區名稱
         guard let _locality = locality else { return ""}
         // 街道名稱
@@ -26,7 +27,7 @@ extension CLPlacemark {
         // 門牌號碼
         guard let _subThoroughfare = subThoroughfare else { return ""}
         
-        let fullAddress =  _subAdministrativeArea + _locality + _thoroughfare + _subThoroughfare + "號"
+        let fullAddress =  _locality + _thoroughfare + _subThoroughfare + "號"
         
         return fullAddress
     }

@@ -8,6 +8,9 @@
 
 /* Begin PBXBuildFile section */
 		42008E4D279851DE00E591B6 /* Place.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42008E4C279851DE00E591B6 /* Place.swift */; };
+		42717E1328A795FD0005EFBD /* ListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42717E1228A795FD0005EFBD /* ListViewModel.swift */; };
+		428B527F27F059760081FCE7 /* ListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 428B527E27F059760081FCE7 /* ListView.swift */; };
+		428B528127F0599D0081FCE7 /* Site.swift in Sources */ = {isa = PBXBuildFile; fileRef = 428B528027F0599D0081FCE7 /* Site.swift */; };
 		42DCFDD127981A4000CC02CD /* TripMapApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42DCFDD027981A4000CC02CD /* TripMapApp.swift */; };
 		42DCFDD327981A4000CC02CD /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42DCFDD227981A4000CC02CD /* ContentView.swift */; };
 		42DCFDD527981A4100CC02CD /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 42DCFDD427981A4100CC02CD /* Assets.xcassets */; };
@@ -17,10 +20,14 @@
 		42DCFDE627981AF500CC02CD /* Home.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42DCFDE527981AF500CC02CD /* Home.swift */; };
 		42DCFDE827981B0500CC02CD /* MapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42DCFDE727981B0500CC02CD /* MapView.swift */; };
 		42DCFDEC27981C3200CC02CD /* MapViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42DCFDEB27981C3200CC02CD /* MapViewModel.swift */; };
+		42E4267B27F066A600B67701 /* PlaceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42E4267A27F066A600B67701 /* PlaceView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		42008E4C279851DE00E591B6 /* Place.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Place.swift; sourceTree = "<group>"; };
+		42717E1228A795FD0005EFBD /* ListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListViewModel.swift; sourceTree = "<group>"; };
+		428B527E27F059760081FCE7 /* ListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListView.swift; sourceTree = "<group>"; };
+		428B528027F0599D0081FCE7 /* Site.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Site.swift; sourceTree = "<group>"; };
 		42DCFDCD27981A4000CC02CD /* TripMap.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TripMap.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		42DCFDD027981A4000CC02CD /* TripMapApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TripMapApp.swift; sourceTree = "<group>"; };
 		42DCFDD227981A4000CC02CD /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -31,6 +38,7 @@
 		42DCFDE527981AF500CC02CD /* Home.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Home.swift; sourceTree = "<group>"; };
 		42DCFDE727981B0500CC02CD /* MapView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapView.swift; sourceTree = "<group>"; };
 		42DCFDEB27981C3200CC02CD /* MapViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapViewModel.swift; sourceTree = "<group>"; };
+		42E4267A27F066A600B67701 /* PlaceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -48,6 +56,7 @@
 			isa = PBXGroup;
 			children = (
 				42008E4C279851DE00E591B6 /* Place.swift */,
+				428B528027F0599D0081FCE7 /* Site.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -97,6 +106,8 @@
 			children = (
 				42DCFDE527981AF500CC02CD /* Home.swift */,
 				42DCFDE727981B0500CC02CD /* MapView.swift */,
+				428B527E27F059760081FCE7 /* ListView.swift */,
+				42E4267A27F066A600B67701 /* PlaceView.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -105,6 +116,7 @@
 			isa = PBXGroup;
 			children = (
 				42DCFDEB27981C3200CC02CD /* MapViewModel.swift */,
+				42717E1228A795FD0005EFBD /* ListViewModel.swift */,
 			);
 			path = ViewModel;
 			sourceTree = "<group>";
@@ -181,12 +193,16 @@
 			files = (
 				42DCFDDA27981A4100CC02CD /* Persistence.swift in Sources */,
 				42DCFDE827981B0500CC02CD /* MapView.swift in Sources */,
+				42717E1328A795FD0005EFBD /* ListViewModel.swift in Sources */,
 				42DCFDDD27981A4100CC02CD /* TripMap.xcdatamodeld in Sources */,
 				42008E4D279851DE00E591B6 /* Place.swift in Sources */,
 				42DCFDE627981AF500CC02CD /* Home.swift in Sources */,
 				42DCFDEC27981C3200CC02CD /* MapViewModel.swift in Sources */,
 				42DCFDD327981A4000CC02CD /* ContentView.swift in Sources */,
 				42DCFDD127981A4000CC02CD /* TripMapApp.swift in Sources */,
+				42E4267B27F066A600B67701 /* PlaceView.swift in Sources */,
+				428B527F27F059760081FCE7 /* ListView.swift in Sources */,
+				428B528127F0599D0081FCE7 /* Site.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

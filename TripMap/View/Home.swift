@@ -16,6 +16,8 @@ struct Home: View {
     
     @State var isEditing = false
     
+    @State private var ListViewSheet = false
+    
     var body: some View {
         
         ZStack {
@@ -32,12 +34,24 @@ struct Home: View {
             }
             .padding()
             
+            Image(systemName: "pin.fill")
+                .foregroundColor(.red)
+            
             VStack {
                 
                 Spacer()
                 
                 // 調整定位、切換地圖按鈕
                 VStack(spacing: 5.0) {
+                    
+                    // 測試按鈕
+                    Button(action: mapData.getCenterLocation) {
+                        Image(systemName: "hammer")
+                            .font(.title2)
+                            .padding(4.7)
+                            .background(Color.white)
+                            .cornerRadius(10.0)
+                    }
                     
                     // 切換地圖按鈕
                     Button(action: mapData.updateMapType) {
@@ -64,24 +78,29 @@ struct Home: View {
                 
                 // 底部選單列
                 HStack() {
-                    Button(action:{}, label: {
+                    Button(action:{
+                        self.ListViewSheet = true
+                    }, label: {
                         Image(systemName: "list.bullet.rectangle")
                     })
                         .frame(maxWidth: .infinity)
-                    
+
                     Text("")
                         .frame(maxWidth: .infinity)
-                    
+
                     Button(action:{}, label: {
                         Image(systemName: "person.circle")
                     })
                         .frame(maxWidth: .infinity)
-                    
+
                 }
                 .font(.largeTitle)
                 .foregroundColor(.black)
                 .padding()
-                
+                .sheet(isPresented: $ListViewSheet) {
+                    ListView()
+                }
+
                 // 「設置」button
                 .overlay(
                     Button(action:{}, label: {
@@ -89,7 +108,7 @@ struct Home: View {
                             Text("設   置")
                                 .font(.body)
                                 .fontWeight(.bold)
-                            
+
                             Image(systemName: "list.bullet")
                                 .font(.system(size: 50.0, weight: .bold))
                         }
