@@ -17,7 +17,9 @@ struct Home: View {
     @State var isEditing = false
     
     @State private var ListViewSheet = false
-    
+
+    @State private var PlaceViewSheet = false
+
     var body: some View {
         
         ZStack {
@@ -103,7 +105,9 @@ struct Home: View {
 
                 // 「設置」button
                 .overlay(
-                    Button(action:{}, label: {
+                    Button(action:{
+                        self.PlaceViewSheet = true
+                    }, label: {
                         VStack(spacing: 5.0) {
                             Text("設   置")
                                 .font(.body)
@@ -119,6 +123,10 @@ struct Home: View {
                         .background(LinearGradient(gradient: Gradient(colors: [Color("設置顏色淺"), Color("設置顏色深")]), startPoint: .topLeading, endPoint: .bottomTrailing))
                         .clipShape(Circle())
                         .offset(y: -40.0)
+//                        .sheet(isPresented: $PlaceViewSheet) {
+//                            let position = Sites()
+//                            PlaceView()
+//                        }
                 )
                 .frame(maxWidth: .infinity)
                 .background(.white)

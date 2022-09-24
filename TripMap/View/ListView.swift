@@ -6,23 +6,30 @@
 //
 import SwiftUI
 
+let noneImageView: some View = qusetionView()
+
 struct ListView: View {
     
-    @State var something = [
-        Site(image: ["https"], name: "豚戈屋台", star: 1),
-        Site(image: ["https://i.imgur.com/k5L85MH.jpeg"], name: "阿比", star: 2)
-    ]
+    @FetchRequest(
+        entity: Sites.entity(),
+        sortDescriptors: [])
+    var Site: FetchedResults<Sites>
+    
+//    @State var something = [
+//        Site(image: ["https"], name: "豚戈屋台", star: 1),
+//        Site(image: ["https://i.imgur.com/k5L85MH.jpeg"], name: "阿比", star: 2)
+//    ]
     
     var body: some View {
         NavigationView {
             List {
-                ForEach(something.sorted(by: <), id: \.id) { place in
+                ForEach(Site.indices, id: \.self) { place in
                     ZStack {
-                        NavigationLink(destination: PlaceView(placeContent: place)) {
+                        NavigationLink(destination: PlaceView(placeContent: Site[place])) {
                             EmptyView()
                         }
                         .opacity(0)
-                        someList(place: place)
+                        someList(place: Site[place])
                     }
                 }
             }
@@ -34,43 +41,27 @@ struct ListView: View {
 
 struct ListView_Previews: PreviewProvider {
     static var previews: some View {
-        ListView()
-    }
-}
-
-struct noneImageView: View {
-    var body: some View {
-        ZStack {
-            RoundedRectangle(cornerRadius: 25)
-                .frame(width: 80, height: 80)
-                .foregroundColor(Color("SystemColorReverse"))
-                .overlay(
-                    RoundedRectangle(cornerRadius: 25)
-                        .stroke(Color("SystemColor"), lineWidth: 5)
-                )
-            Image(systemName: "questionmark")
-                .font(Font.system(size: 50, weight: .semibold))
+        NavigationView {
+            ListView()
+                .environment(\.managedObjectContext, PersistenceController.preview.container.viewContext)
         }
     }
 }
 
 struct someList: View {
-    var place: Site
+    
+    var place: Sites
     var body: some View {
         HStack {
             VStack {
-                AsyncImage(url: URL(string: place.image[0]!)) { phase in
-                    if let image = phase.image {
-                        image
-                            .resizable()
-                            .scaledToFill()
-                            .frame(width: 80, height: 80)
-                            .cornerRadius(25)
-                    } else if phase.error != nil {
-                        noneImageView()
-                    } else {
-                        noneImageView()
-                    }
+                if let imageData = place.coverImage {
+                    Image(uiImage: UIImage(data: imageData) ?? UIImage())
+                        .resizable()
+                        .scaledToFill()
+                        .frame(width: 80, height: 80)
+                        .cornerRadius(25)
+                } else {
+                    noneImageView
                 }
             }
             .padding([.top, .bottom], 5.0)

@@ -41,9 +41,9 @@ struct MapView: UIViewRepresentable {
             if annotation.isKind(of: MKUserLocation.self) {
                 return nil
             } else {
-                let pinAnnotation = MKPinAnnotationView(annotation: annotation, reuseIdentifier: "PIN VIEW")
+                let pinAnnotation = MKMarkerAnnotationView(annotation: annotation, reuseIdentifier: "PIN VIEW")
                 pinAnnotation.tintColor = .red
-                pinAnnotation.animatesDrop = true
+                pinAnnotation.animatesWhenAdded = true
                 pinAnnotation.canShowCallout = true
                 
                 return pinAnnotation

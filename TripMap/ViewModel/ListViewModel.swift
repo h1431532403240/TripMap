@@ -8,5 +8,5 @@
 import Combine
 
 class ListViewModel: ObservableObject {
-    @Published var Lists: [Site] = []
+    @Published var Lists: [Sites] = []
 }
