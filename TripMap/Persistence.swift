@@ -15,7 +15,7 @@ struct PersistenceController {
         let result = PersistenceController(inMemory: true)
         let viewContext = result.container.viewContext
         
-        let site = Sites(context: viewContext)
+        let site = Site(context: viewContext)
         site.coverImage = (UIImage(named: "Cat")?.jpegData(compressionQuality: 1.0))!
         site.time = Date()
         site.star = 0
@@ -25,7 +25,7 @@ struct PersistenceController {
         site.latitude = 23.0222115138
         site.longitude = 120.224012996
         site.content = "好吃又好玩"
-        site.project = Projects(context: viewContext)
+        site.project = Project(context: viewContext)
         site.project.play = "吃"
         site.project.emoji = "🍔"
         
@@ -42,9 +42,9 @@ struct PersistenceController {
 
     let container: NSPersistentCloudKitContainer
     
-    static var testData: [Sites]? = {
+    static var testData: [Site]? = {
         let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "Sites")
-        return try? PersistenceController.preview.container.viewContext.fetch(fetchRequest) as? [Sites]
+        return try? PersistenceController.preview.container.viewContext.fetch(fetchRequest) as? [Site]
     }()
 
     init(inMemory: Bool = false) {

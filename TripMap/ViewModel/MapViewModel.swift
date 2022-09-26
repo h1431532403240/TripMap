@@ -44,9 +44,34 @@ class MapViewModel: NSObject, ObservableObject, CLLocationManagerDelegate {
     }
     
     // 獲取地圖中心經緯度
-    func getCenterLocation() {
+    func getCenterLocation() -> CLLocationCoordinate2D {
         centerLocation = mapView.centerCoordinate
-        print("經度：\(String(describing: centerLocation?.longitude) ), 緯度：\(String(describing: centerLocation?.latitude))")
+        return centerLocation!
+    }
+    
+    func getAddress(location: CLLocation) -> String {
+        var address: String = ""
+        let geoCoder = CLGeocoder()
+        
+        geoCoder.reverseGeocodeLocation(location, preferredLocale: Locale(identifier: "zh_TW")) { placemark, error in
+            guard let placemark = placemark?.first, error == nil else { return }
+            
+            DispatchQueue.main.async {
+                address += placemark.country ?? ""
+                address += placemark.administrativeArea ?? ""
+                address += placemark.subAdministrativeArea ?? ""
+                address += placemark.locality ?? ""
+                address += placemark.subLocality ?? ""
+                address += placemark.thoroughfare ?? ""
+                address += placemark.subThoroughfare ?? ""
+                address += "號"
+                
+                print("經度：\(String(describing: location.coordinate.longitude) ), 緯度：\(String(describing: location.coordinate.latitude))")
+                
+                print(address)
+            }
+        }
+        return address
     }
     
     // 前往個人定位

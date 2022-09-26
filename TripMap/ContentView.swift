@@ -9,16 +9,18 @@ import SwiftUI
 import CoreData
 
 struct ContentView: View {
-//    @Environment(\.managedObjectContext) private var viewContext
-//
-//    @FetchRequest(
-//        sortDescriptors: [NSSortDescriptor(keyPath: \Item.timestamp, ascending: true)],
-//        animation: .default)
-//    private var items: FetchedResults<Item>
+    
+    @Environment(\.managedObjectContext) private var viewContext
+
+    @FetchRequest(
+        sortDescriptors: [],
+        animation: .default)
+    private var Sites: FetchedResults<Site>
 
     var body: some View {
         
         Home()
+            .environment(\.managedObjectContext, PersistenceController.preview.container.viewContext)
         
 //        NavigationView {
 //            List {

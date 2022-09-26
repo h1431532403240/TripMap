@@ -8,7 +8,7 @@ import SwiftUI
 import MapKit
 import CoreData
 
-public class Sites: NSManagedObject {
+public class Site: NSManagedObject {
 
     @NSManaged public var address: String
     @NSManaged public var content: String
@@ -19,7 +19,7 @@ public class Sites: NSManagedObject {
     @NSManaged public var name: String
     @NSManaged public var star: Int64
     @NSManaged public var time: Date
-    @NSManaged public var project: Projects
+    @NSManaged public var project: Project
     
 }
 

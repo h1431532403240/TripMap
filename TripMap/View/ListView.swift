@@ -11,25 +11,20 @@ let noneImageView: some View = qusetionView()
 struct ListView: View {
     
     @FetchRequest(
-        entity: Sites.entity(),
+        entity: Site.entity(),
         sortDescriptors: [])
-    var Site: FetchedResults<Sites>
-    
-//    @State var something = [
-//        Site(image: ["https"], name: "豚戈屋台", star: 1),
-//        Site(image: ["https://i.imgur.com/k5L85MH.jpeg"], name: "阿比", star: 2)
-//    ]
+    var Sites: FetchedResults<Site>
     
     var body: some View {
         NavigationView {
             List {
-                ForEach(Site.indices, id: \.self) { place in
+                ForEach(Sites.indices, id: \.self) { place in
                     ZStack {
-                        NavigationLink(destination: PlaceView(placeContent: Site[place])) {
+                        NavigationLink(destination: PlaceView(placeContent: Sites[place], update: true)) {
                             EmptyView()
                         }
                         .opacity(0)
-                        someList(place: Site[place])
+                        someList(place: Sites[place])
                     }
                 }
             }
@@ -50,7 +45,7 @@ struct ListView_Previews: PreviewProvider {
 
 struct someList: View {
     
-    var place: Sites
+    var place: Site
     var body: some View {
         HStack {
             VStack {
@@ -93,9 +88,9 @@ struct someList: View {
             }
             .tint(.red)
             Button {
-                print("導航")
+                print("編輯")
             } label: {
-                Label("導航", systemImage: "location.fill")
+                Label("編輯", systemImage: "square.and.pencil")
             }
             .tint(Color("設置顏色深"))
         }

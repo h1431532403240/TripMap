@@ -7,10 +7,15 @@
 
 import SwiftUI
 import CoreLocation
+import CoreData
 
 struct Home: View {
     
     @StateObject var mapData = MapViewModel()
+    
+    @Environment(\.managedObjectContext) var context
+    
+//    @State var placeContent = Site()
     
     @State var locationManager = CLLocationManager()
     
@@ -47,7 +52,9 @@ struct Home: View {
                 VStack(spacing: 5.0) {
                     
                     // 測試按鈕
-                    Button(action: mapData.getCenterLocation) {
+                    Button(action: {
+                        
+                    }) {
                         Image(systemName: "hammer")
                             .font(.title2)
                             .padding(4.7)
@@ -80,6 +87,7 @@ struct Home: View {
                 
                 // 底部選單列
                 HStack() {
+                    // 列表
                     Button(action:{
                         self.ListViewSheet = true
                     }, label: {
@@ -89,7 +97,8 @@ struct Home: View {
 
                     Text("")
                         .frame(maxWidth: .infinity)
-
+                    
+                    // 個人頁面
                     Button(action:{}, label: {
                         Image(systemName: "person.circle")
                     })
@@ -130,6 +139,9 @@ struct Home: View {
                 )
                 .frame(maxWidth: .infinity)
                 .background(.white)
+                .sheet(isPresented: $PlaceViewSheet) {
+                    PlaceView(placeContent: SavePlace(), add: true)
+                }
                 
             }
             
@@ -169,6 +181,43 @@ struct Home: View {
                 
             }
         })
+    }
+    
+    private func SavePlace() -> Site {
+        let placeContent = Site()
+        
+        let address = mapData.getAddress(location: CLLocation(latitude: mapData.getCenterLocation().latitude, longitude: mapData.getCenterLocation().longitude))
+        
+        placeContent.id = UUID().uuidString
+        placeContent.longitude = mapData.getCenterLocation().longitude
+        placeContent.latitude = mapData.getCenterLocation().latitude
+        placeContent.address = address
+        placeContent.coverImage = UIImage(named: "Cat")!.pngData()!
+        placeContent.time = Date()
+        placeContent.name = ""
+        placeContent.star = 0
+        placeContent.content = ""
+        
+        let site = NSEntityDescription.insertNewObject(forEntityName: "Site", into: context) as! Site
+
+        site.id = placeContent.id
+        site.longitude = placeContent.longitude
+        site.latitude = placeContent.latitude
+        site.address = placeContent.address
+        site.coverImage = placeContent.coverImage
+        site.time = placeContent.time
+        site.name = placeContent.name
+        site.star = placeContent.star
+        site.content = placeContent.content
+        
+        do{
+            try context.save()
+            print("新增資料")
+        }catch let createError{
+            print("Failed to create :\(createError)")
+        }
+        
+        return placeContent
     }
 }
 
@@ -259,6 +308,7 @@ struct Home_Previews: PreviewProvider {
     static var previews: some View {
         Group {
             Home()
+                .environment(\.managedObjectContext, PersistenceController.preview.container.viewContext)
         }
     }
 }

@@ -8,7 +8,7 @@
 import Foundation
 import CoreData
 
-public class Projects: NSManagedObject {
+public class Project: NSManagedObject {
     
     @NSManaged public var emoji: String
     @NSManaged public var play: String
