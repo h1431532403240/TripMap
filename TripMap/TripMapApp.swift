@@ -13,7 +13,7 @@ struct TripMapApp: App {
 
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            Home()
                 .environment(\.managedObjectContext, persistenceController.container.viewContext)
 //            ListView()
 //                .environment(\.managedObjectContext, persistenceController.container.viewContext)

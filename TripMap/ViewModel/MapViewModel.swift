@@ -30,7 +30,7 @@ class MapViewModel: NSObject, ObservableObject, CLLocationManagerDelegate {
     @Published var places: [Place] = []
     
     @Published var centerLocation: CLLocationCoordinate2D?
-    
+        
     // 變更地圖類型
     func updateMapType() {
         
@@ -43,35 +43,36 @@ class MapViewModel: NSObject, ObservableObject, CLLocationManagerDelegate {
         }
     }
     
-    // 獲取地圖中心經緯度
-    func getCenterLocation() -> CLLocationCoordinate2D {
-        centerLocation = mapView.centerCoordinate
-        return centerLocation!
-    }
+//    // 獲取地圖中心經緯度
+//    func getCenterLocation() -> CLLocationCoordinate2D {
+//        centerLocation = mapView.centerCoordinate
+//        return centerLocation!
+//    }
     
-    func getAddress(location: CLLocation) -> String {
-        var address: String = ""
+    // 獲取地圖中心經緯度
+    func getCenterLocation() {
+        centerLocation = mapView.centerCoordinate
+    }
+
+    func getAddress(location: CLLocation, completion: @escaping (_ address: String) -> Void) {
         let geoCoder = CLGeocoder()
         
         geoCoder.reverseGeocodeLocation(location, preferredLocale: Locale(identifier: "zh_TW")) { placemark, error in
             guard let placemark = placemark?.first, error == nil else { return }
             
-            DispatchQueue.main.async {
-                address += placemark.country ?? ""
-                address += placemark.administrativeArea ?? ""
-                address += placemark.subAdministrativeArea ?? ""
-                address += placemark.locality ?? ""
-                address += placemark.subLocality ?? ""
-                address += placemark.thoroughfare ?? ""
-                address += placemark.subThoroughfare ?? ""
-                address += "號"
+            var address: String = ""
+            address += placemark.country ?? ""
+            address += placemark.administrativeArea ?? ""
+            address += placemark.subAdministrativeArea ?? ""
+            address += placemark.locality ?? ""
+            address += placemark.subLocality ?? ""
+            address += placemark.thoroughfare ?? ""
+            address += placemark.subThoroughfare ?? ""
+            address += "號"
                 
-                print("經度：\(String(describing: location.coordinate.longitude) ), 緯度：\(String(describing: location.coordinate.latitude))")
-                
-                print(address)
-            }
+            print("經度：\(String(describing: location.coordinate.longitude) ), 緯度：\(String(describing: location.coordinate.latitude))")
+            completion(address)
         }
-        return address
     }
     
     // 前往個人定位

@@ -20,7 +20,6 @@ struct ContentView: View {
     var body: some View {
         
         Home()
-            .environment(\.managedObjectContext, PersistenceController.preview.container.viewContext)
         
 //        NavigationView {
 //            List {
@@ -88,6 +87,7 @@ struct ContentView: View {
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
-        ContentView().previewDevice("iPhone 13 mini")
+        ContentView()
+            .environment(\.managedObjectContext, PersistenceController.preview.container.viewContext)
     }
 }

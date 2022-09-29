@@ -110,6 +110,7 @@ struct Home: View {
                 .padding()
                 .sheet(isPresented: $ListViewSheet) {
                     ListView()
+                        .interactiveDismissDisabled()
                 }
 
                 // 「設置」button
@@ -141,6 +142,7 @@ struct Home: View {
                 .background(.white)
                 .sheet(isPresented: $PlaceViewSheet) {
                     PlaceView(placeContent: SavePlace(), add: true)
+                        .interactiveDismissDisabled()
                 }
                 
             }
@@ -184,40 +186,32 @@ struct Home: View {
     }
     
     private func SavePlace() -> Site {
-        let placeContent = Site()
-        
-        let address = mapData.getAddress(location: CLLocation(latitude: mapData.getCenterLocation().latitude, longitude: mapData.getCenterLocation().longitude))
-        
-        placeContent.id = UUID().uuidString
-        placeContent.longitude = mapData.getCenterLocation().longitude
-        placeContent.latitude = mapData.getCenterLocation().latitude
-        placeContent.address = address
-        placeContent.coverImage = UIImage(named: "Cat")!.pngData()!
-        placeContent.time = Date()
-        placeContent.name = ""
-        placeContent.star = 0
-        placeContent.content = ""
-        
         let site = NSEntityDescription.insertNewObject(forEntityName: "Site", into: context) as! Site
-
-        site.id = placeContent.id
-        site.longitude = placeContent.longitude
-        site.latitude = placeContent.latitude
-        site.address = placeContent.address
-        site.coverImage = placeContent.coverImage
-        site.time = placeContent.time
-        site.name = placeContent.name
-        site.star = placeContent.star
-        site.content = placeContent.content
         
-        do{
-            try context.save()
-            print("新增資料")
-        }catch let createError{
-            print("Failed to create :\(createError)")
+        mapData.getCenterLocation()
+        
+        let longitude = mapData.centerLocation?.longitude
+        let latitude = mapData.centerLocation?.latitude
+            
+        mapData.getAddress(location: CLLocation(latitude: latitude!, longitude: longitude!)) { (address) in
+            site.address = address
+            print(site.address)
         }
+
+        site.id = UUID().uuidString
+//        site.longitude = 0.0
+//        site.latitude = 0.0
+        site.longitude = longitude!
+        site.latitude = latitude!
+        site.coverImage = UIImage(named: "Cat")!.pngData()!
+        site.time = Date()
+        site.name = ""
+        site.star = 0
+        site.content = ""
         
-        return placeContent
+        print(site)
+
+        return site
     }
 }
 

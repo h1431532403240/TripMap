@@ -23,13 +23,9 @@ public class Site: NSManagedObject {
     
 }
 
-//// 以新增時間排序列表順序
-//extension Site: Comparable {
-//    static func == (a: Site, b: Site) -> Bool {
-//        return a.time == b.time
-//    }
-//
-//    static func < (a: Site, b: Site) -> Bool {
-//        return a.time < b.time
-//    }
-//}
+// 以新增時間排序列表順序
+extension Site: Comparable {
+    public static func < (a: Site, b: Site) -> Bool {
+        return a.time < b.time
+    }
+}

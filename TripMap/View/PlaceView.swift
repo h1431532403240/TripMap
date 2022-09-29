@@ -9,40 +9,72 @@ import SwiftUI
 import MapKit
 import UIKit
 import CoreData
+import PhotosUI
 
 struct PlaceView: View {
     @Environment(\.dismiss) var dismiss
     @Environment(\.managedObjectContext) var context
+        
+    @StateObject var placeContent: Site
+    @State var site = SiteViewModel()
     
-    @State var placeContent: Site
+    @State private var selectedItem: PhotosPickerItem?
+        
+    @State var cancel: Bool = false
     
-    @State private var position = CLLocationCoordinate2D(latitude: 0.0,
-                                                longitude: 0.0)
-    @State private var region = MKCoordinateRegion(
-        center: CLLocationCoordinate2D(latitude: 0.0,
-                                       longitude: 0.0),
-        latitudinalMeters: 200,
-        longitudinalMeters: 200
-    )
-
-    var update: Bool = false
-    
-    var add: Bool = false
+    @State var add: Bool = false
     
     var body: some View {
         ScrollView {
             VStack(spacing: 20.0) {
-                MixTextField(label: "店名", textFieldLabel: "請輸入店名", context: $placeContent.name)
-                MixTextField(label: "地點", textFieldLabel: "請輸入地址", context: $placeContent.address)
-                MixTextField(label: "心得", textFieldLabel: "請輸入內容", context: $placeContent.content)
+                
+                // 圖片顯示、選擇
+                VStack{
+                    Image(uiImage: (UIImage(data: site.coverImage) ?? UIImage(named: "Cat"))!)
+                        .resizable()
+                        .scaledToFill()
+                        .frame(height: 200)
+                        .overlay (
+                            PhotosPicker(selection: $selectedItem, matching: .images) {
+                                Label("選擇圖片", systemImage: "photo")
+                                    .foregroundColor(.white)
+                            }
+                            .tint(.black)
+                            .controlSize(.regular)
+                            .buttonStyle(.bordered)
+                            .cornerRadius(100)
+                            .padding(8)
+                            .onChange(of: selectedItem) { newItem in
+                                Task {
+                                    if let data = try? await newItem?.loadTransferable(type: Data.self) {
+                                        site.coverImage = data
+                                    }
+                                }
+                            },
+                            
+                            alignment: .bottomTrailing
+                            
+                        )
+                }
+                .cornerRadius(20)
+                .frame(height: 200)
+
+
+                Text(site.time.toFormatterString())
+                
+                MixTextField(label: "店名", textFieldLabel: "請輸入店名", context: $site.name)
+                MixTextField(label: "地點", textFieldLabel: "請輸入地址", context: $site.address)
                 
                 MiniMap(placeContent: placeContent)
                     .cornerRadius(20)
                     .frame(height: 150)
                 
+                MixTextField(label: "心得", textFieldLabel: "請輸入內容", context: $site.content)
+                
+                // 底部按鍵
                 HStack {
                     Button{
-                        dismiss()
+                        self.cancel = true
                     } label: {
                         HStack {
                             Text("取消")
@@ -55,6 +87,36 @@ struct PlaceView: View {
                         .font(.title3)
                         .fontWeight(.bold)
                     }
+                    .alert(isPresented: $cancel) {
+                        Alert(title: Text("確定要離開此頁面？"),
+                              message: Text("未儲存將會丟失資料。"),
+                              primaryButton: .default(
+                                Text("確定"),
+                                action: {
+                                    // 如果沒有新增資料，將不會儲存資料。
+                                    if !context.hasChanges {
+                                        if add {
+                                            context.delete(placeContent)
+                                            do{
+                                                try context.save()
+                                                print("刪除資料")
+                                            } catch {
+                                                print(error)
+                                            }
+                                        }
+                                    } else {
+                                        print("有新增資料")
+                                    }
+                                    dismiss()
+                                }
+                              ),
+                              secondaryButton: .destructive(
+                                Text("取消"),
+                                action: {}
+                              )
+                        )
+                    }
+
                     
                     Button{
                         save()
@@ -77,55 +139,36 @@ struct PlaceView: View {
             }
             .padding()
         }
+        .onAppear {
+            site.address = placeContent.address
+            site.content = placeContent.content
+            site.coverImage = placeContent.coverImage
+            site.id = placeContent.id
+            site.latitude = placeContent.latitude
+            site.longitude = placeContent.longitude
+            site.name = placeContent.name
+            site.star = placeContent.star
+            site.time = placeContent.time
+        }
+        .toolbar(.hidden)
     }
-    private func save() {        
-        if update {
-            let fetchRequestRead = NSFetchRequest<Site>(entityName: "Site")
-            fetchRequestRead.fetchLimit = 1
-            fetchRequestRead.predicate = NSPredicate(format: "id == %@", placeContent.id)
-            
-            do{
-                let siteUpdate = try context.fetch(fetchRequestRead)
-                
-                siteUpdate[0].name = placeContent.name
-                siteUpdate[0].coverImage = placeContent.coverImage
-                siteUpdate[0].address = placeContent.address
-                siteUpdate[0].content = placeContent.content
-                siteUpdate[0].longitude = placeContent.longitude
-                siteUpdate[0].latitude = placeContent.latitude
-                siteUpdate[0].id = placeContent.id
-                siteUpdate[0].star = placeContent.star
-                siteUpdate[0].time = placeContent.time
-                
-                do{
-                    try context.save()
-                    print("更新資料")
-                } catch let createError{
-                    print("Failed to update: \(createError)")
-                }
-
-            } catch let fetchError{
-                print("Failed to fetch compaies: \(fetchError)")
-            }
-        } else {
-            
-            let _site = NSEntityDescription.insertNewObject(forEntityName: "Site", into: context) as! Site
-
-            _site.name = placeContent.name
-            _site.coverImage = placeContent.coverImage
-            _site.address = placeContent.address
-            _site.content = placeContent.content
-            _site.longitude = placeContent.longitude
-            _site.latitude = placeContent.latitude
-            _site.id = placeContent.id
-            _site.star = placeContent.star
-            _site.time = placeContent.time
-
+    
+    private func save() {
+        placeContent.address = site.address
+        placeContent.content = site.content
+        placeContent.coverImage = site.coverImage
+        placeContent.id = site.id
+        placeContent.latitude = site.latitude
+        placeContent.longitude = site.longitude
+        placeContent.name = site.name
+        placeContent.star = site.star
+        placeContent.time = site.time
+        
+        if placeContent.hasChanges {
             do{
                 try context.save()
-                print("新增資料")
-            }catch let createError{
-                print("Failed to create :\(createError)")
+            } catch {
+                print(error)
             }
         }
     }
@@ -186,6 +229,15 @@ struct MixTextField: View {
         }
     }
     
+}
+
+extension Date {
+    func toFormatterString() -> String {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy/MM/dd hh:mm:ss"
+        
+        return dateFormatter.string(from: self)
+    }
 }
 
 struct PlaceView_Previews: PreviewProvider {

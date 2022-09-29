@@ -13,7 +13,7 @@ class SiteViewModel: ObservableObject {
 
     @Published var address: String = ""
     @Published var content: String = ""
-    @Published var coverImage: UIImage = UIImage()
+    @Published var coverImage: Data = Data()
     @Published var id: String = UUID().uuidString
     @Published var latitude: Double = 0.0
     @Published var longitude: Double = 0.0
@@ -26,7 +26,7 @@ class SiteViewModel: ObservableObject {
         if let site = site {
             self.address = site.address
             self.content = site.content
-            self.coverImage = UIImage(data: site.coverImage) ?? UIImage()
+            self.coverImage = site.coverImage
             self.id = site.id
             self.latitude = site.latitude
             self.longitude = site.longitude
@@ -35,5 +35,4 @@ class SiteViewModel: ObservableObject {
             self.time = site.time
         }
     }
-    
 }

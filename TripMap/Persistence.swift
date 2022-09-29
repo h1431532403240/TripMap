@@ -10,6 +10,8 @@ import UIKit
 
 struct PersistenceController {
     static let shared = PersistenceController()
+    
+    let container: NSPersistentContainer
 
     static var preview: PersistenceController = {
         let result = PersistenceController(inMemory: true)
@@ -39,11 +41,9 @@ struct PersistenceController {
         }
         return result
     }()
-
-    let container: NSPersistentCloudKitContainer
     
     static var testData: [Site]? = {
-        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "Sites")
+        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "Site")
         return try? PersistenceController.preview.container.viewContext.fetch(fetchRequest) as? [Site]
     }()
 

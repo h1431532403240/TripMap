@@ -9,10 +9,12 @@ import SwiftUI
 let noneImageView: some View = qusetionView()
 
 struct ListView: View {
+    @Environment(\.dismiss) var dismiss
+    @Environment(\.managedObjectContext) var context
     
     @FetchRequest(
         entity: Site.entity(),
-        sortDescriptors: [])
+        sortDescriptors: [NSSortDescriptor(keyPath: \Site.time, ascending: false)])
     var Sites: FetchedResults<Site>
     
     var body: some View {
@@ -20,31 +22,51 @@ struct ListView: View {
             List {
                 ForEach(Sites.indices, id: \.self) { place in
                     ZStack {
-                        NavigationLink(destination: PlaceView(placeContent: Sites[place], update: true)) {
+                        NavigationLink(destination: PlaceView(placeContent: Sites[place])) {
                             EmptyView()
                         }
                         .opacity(0)
                         someList(place: Sites[place])
+                            .swipeActions(edge: .trailing, allowsFullSwipe: false) {
+                                Button {
+                                    context.delete(Sites[place])
+                                    do {
+                                        try context.save()
+                                    } catch {
+                                        print(error)
+                                    }
+                                    print("刪除")
+                                } label: {
+                                    Label("刪除", systemImage: "trash")
+                                }
+                                .tint(.red)
+                                Button {
+                                    print("編輯")
+                                } label: {
+                                    Label("編輯", systemImage: "square.and.pencil")
+                                }
+                                .tint(Color("設置顏色深"))
+                            }
                     }
                 }
             }
             .navigationTitle("儲存地點")
             .navigationBarTitleDisplayMode(.automatic)
-        }
-    }
-}
-
-struct ListView_Previews: PreviewProvider {
-    static var previews: some View {
-        NavigationView {
-            ListView()
-                .environment(\.managedObjectContext, PersistenceController.preview.container.viewContext)
+            .toolbar {
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    Button(action: {
+                        dismiss()
+                    }) {
+                        Text("關閉")
+                    }
+                }
+            }
         }
     }
 }
 
 struct someList: View {
-    
+
     var place: Site
     var body: some View {
         HStack {
@@ -80,20 +102,14 @@ struct someList: View {
             }
             .padding()
         }
-        .swipeActions(edge: .trailing, allowsFullSwipe: false) {
-            Button {
-                print("刪除")
-            } label: {
-                Label("刪除", systemImage: "trash")
-            }
-            .tint(.red)
-            Button {
-                print("編輯")
-            } label: {
-                Label("編輯", systemImage: "square.and.pencil")
-            }
-            .tint(Color("設置顏色深"))
+    }
+}
+
+struct ListView_Previews: PreviewProvider {
+    static var previews: some View {
+        NavigationView {
+            ListView()
+                .environment(\.managedObjectContext, PersistenceController.preview.container.viewContext)
         }
-        
     }
 }
