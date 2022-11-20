@@ -17,16 +17,20 @@ struct ListView: View {
         sortDescriptors: [NSSortDescriptor(keyPath: \Site.time, ascending: false)])
     var Sites: FetchedResults<Site>
     
+    @State var selectedPlace = [Int]()
+        
     var body: some View {
-        NavigationView {
+        NavigationStack(path: $selectedPlace) {
             List {
                 ForEach(Sites.indices, id: \.self) { place in
                     ZStack {
-                        NavigationLink(destination: PlaceView(placeContent: Sites[place])) {
-                            EmptyView()
-                        }
-                        .opacity(0)
+//                        NavigationLink(destination: PlaceView(placeContent: Sites[place]), isActive: 1) {
+//                            EmptyView()
+//                        }
+                        NavigationLink(Sites[place].name, value: 1)
+                            .opacity(0)
                         someList(place: Sites[place])
+                        // 左滑選項
                             .swipeActions(edge: .trailing, allowsFullSwipe: false) {
                                 Button {
                                     context.delete(Sites[place])
@@ -41,12 +45,21 @@ struct ListView: View {
                                 }
                                 .tint(.red)
                                 Button {
+                                    self.selectedPlace.append(1)
                                     print("編輯")
                                 } label: {
                                     Label("編輯", systemImage: "square.and.pencil")
                                 }
                                 .tint(Color("設置顏色深"))
                             }
+                    }
+                    .navigationDestination(for: Int.self) { target in
+                        switch target {
+                        case 1:
+                            PlaceView(placeContent: Sites[place])
+                        default:
+                            EmptyView()
+                        }
                     }
                 }
             }
@@ -87,6 +100,7 @@ struct someList: View {
                     .font(.title)
                     .fontWeight(.bold)
                     .padding(.bottom, 10.0)
+                    .lineLimit(1)
                 HStack {
                     ForEach((1...5), id: \.self) { count in
                         let star = place.star

@@ -14,9 +14,7 @@ struct Home: View {
     @StateObject var mapData = MapViewModel()
     
     @Environment(\.managedObjectContext) var context
-    
-//    @State var placeContent = Site()
-    
+        
     @State var locationManager = CLLocationManager()
     
     @State var isEditing = false
@@ -24,7 +22,7 @@ struct Home: View {
     @State private var ListViewSheet = false
 
     @State private var PlaceViewSheet = false
-
+    
     var body: some View {
         
         ZStack {
@@ -133,16 +131,12 @@ struct Home: View {
                         .background(LinearGradient(gradient: Gradient(colors: [Color("設置顏色淺"), Color("設置顏色深")]), startPoint: .topLeading, endPoint: .bottomTrailing))
                         .clipShape(Circle())
                         .offset(y: -40.0)
-//                        .sheet(isPresented: $PlaceViewSheet) {
-//                            let position = Sites()
-//                            PlaceView()
-//                        }
                 )
                 .frame(maxWidth: .infinity)
                 .background(.white)
                 .sheet(isPresented: $PlaceViewSheet) {
                     PlaceView(placeContent: SavePlace(), add: true)
-                        .interactiveDismissDisabled()
+                    .interactiveDismissDisabled()
                 }
                 
             }
@@ -188,26 +182,24 @@ struct Home: View {
     private func SavePlace() -> Site {
         let site = NSEntityDescription.insertNewObject(forEntityName: "Site", into: context) as! Site
         
-        mapData.getCenterLocation()
-        
-        let longitude = mapData.centerLocation?.longitude
-        let latitude = mapData.centerLocation?.latitude
-            
-        mapData.getAddress(location: CLLocation(latitude: latitude!, longitude: longitude!)) { (address) in
-            site.address = address
-            print(site.address)
-        }
-
+        let longitude = mapData.mapView.centerCoordinate.longitude
+        let latitude = mapData.mapView.centerCoordinate.latitude
+                
+//        mapData.getAddress(location: CLLocation(latitude: latitude, longitude: longitude)) { (address) in
+//            site.address = address
+//            print(site.address)
+//        }
+                
+        site.address = mapData.address
         site.id = UUID().uuidString
-//        site.longitude = 0.0
-//        site.latitude = 0.0
-        site.longitude = longitude!
-        site.latitude = latitude!
+        site.longitude = longitude
+        site.latitude = latitude
         site.coverImage = UIImage(named: "Cat")!.pngData()!
         site.time = Date()
         site.name = ""
         site.star = 0
         site.content = ""
+        
         
         print(site)
 

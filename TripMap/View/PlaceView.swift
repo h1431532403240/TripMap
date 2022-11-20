@@ -15,7 +15,7 @@ struct PlaceView: View {
     @Environment(\.dismiss) var dismiss
     @Environment(\.managedObjectContext) var context
         
-    @StateObject var placeContent: Site
+    @ObservedObject var placeContent: Site
     @State var site = SiteViewModel()
     
     @State private var selectedItem: PhotosPickerItem?
@@ -29,32 +29,29 @@ struct PlaceView: View {
             VStack(spacing: 20.0) {
                 
                 // 圖片顯示、選擇
-                VStack{
+                ZStack(alignment: .bottomTrailing) {
+
                     Image(uiImage: (UIImage(data: site.coverImage) ?? UIImage(named: "Cat"))!)
-                        .resizable()
-                        .scaledToFill()
-                        .frame(height: 200)
-                        .overlay (
-                            PhotosPicker(selection: $selectedItem, matching: .images) {
-                                Label("選擇圖片", systemImage: "photo")
-                                    .foregroundColor(.white)
+                            .resizable()
+                            .scaledToFill()
+                            .frame(height: 200)
+                    
+                    PhotosPicker(selection: $selectedItem, matching: .images) {
+                        Label("選擇圖片", systemImage: "photo")
+                            .foregroundColor(.white)
+                    }
+                    .tint(.black)
+                    .controlSize(.regular)
+                    .buttonStyle(.bordered)
+                    .cornerRadius(100)
+                    .padding(8)
+                    .onChange(of: selectedItem) { newItem in
+                        Task {
+                            if let data = try? await newItem?.loadTransferable(type: Data.self) {
+                                site.coverImage = data
                             }
-                            .tint(.black)
-                            .controlSize(.regular)
-                            .buttonStyle(.bordered)
-                            .cornerRadius(100)
-                            .padding(8)
-                            .onChange(of: selectedItem) { newItem in
-                                Task {
-                                    if let data = try? await newItem?.loadTransferable(type: Data.self) {
-                                        site.coverImage = data
-                                    }
-                                }
-                            },
-                            
-                            alignment: .bottomTrailing
-                            
-                        )
+                        }
+                    }
                 }
                 .cornerRadius(20)
                 .frame(height: 200)
@@ -164,7 +161,7 @@ struct PlaceView: View {
         placeContent.star = site.star
         placeContent.time = site.time
         
-        if placeContent.hasChanges {
+        if context.hasChanges {
             do{
                 try context.save()
             } catch {

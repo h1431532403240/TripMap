@@ -8,6 +8,7 @@
 import SwiftUI
 import MapKit
 import CoreLocation
+import Contacts
 
 // 所有Map資料
 class MapViewModel: NSObject, ObservableObject, CLLocationManagerDelegate {
@@ -24,13 +25,17 @@ class MapViewModel: NSObject, ObservableObject, CLLocationManagerDelegate {
     @Published var mapType: MKMapType = .standard
     
     // 搜尋文字
-    @Published var searchText = ""
+    @Published var searchText: String = ""
     
     // 搜索地點儲存
     @Published var places: [Place] = []
     
+    typealias CompletionHandler = (_ success:Bool) -> Void
+    
     @Published var centerLocation: CLLocationCoordinate2D?
-        
+
+    @Published var address: String = ""
+    
     // 變更地圖類型
     func updateMapType() {
         
@@ -49,9 +54,14 @@ class MapViewModel: NSObject, ObservableObject, CLLocationManagerDelegate {
 //        return centerLocation!
 //    }
     
-    // 獲取地圖中心經緯度
+    // 獲取地圖中心經緯度、地址
     func getCenterLocation() {
         centerLocation = mapView.centerCoordinate
+        getAddress(location: CLLocation(latitude: centerLocation!.latitude, longitude: centerLocation!.longitude)) { (address) in
+            self.address = address
+            print(self.centerLocation!)
+            print(address)
+        }
     }
 
     func getAddress(location: CLLocation, completion: @escaping (_ address: String) -> Void) {
@@ -59,7 +69,6 @@ class MapViewModel: NSObject, ObservableObject, CLLocationManagerDelegate {
         
         geoCoder.reverseGeocodeLocation(location, preferredLocale: Locale(identifier: "zh_TW")) { placemark, error in
             guard let placemark = placemark?.first, error == nil else { return }
-            
             var address: String = ""
             address += placemark.country ?? ""
             address += placemark.administrativeArea ?? ""
@@ -69,7 +78,7 @@ class MapViewModel: NSObject, ObservableObject, CLLocationManagerDelegate {
             address += placemark.thoroughfare ?? ""
             address += placemark.subThoroughfare ?? ""
             address += "號"
-                
+
             print("經度：\(String(describing: location.coordinate.longitude) ), 緯度：\(String(describing: location.coordinate.latitude))")
             completion(address)
         }
@@ -164,4 +173,14 @@ class MapViewModel: NSObject, ObservableObject, CLLocationManagerDelegate {
         self.mapView.setVisibleMapRect(self.mapView.visibleMapRect, animated: true)
     }
     
+}
+
+extension CLGeocoder {
+    
+}
+
+extension MapViewModel: MKMapViewDelegate {
+    func mapView(_ mapView: MKMapView, regionDidChangeAnimated animated: Bool) {
+        getCenterLocation()
+    }
 }

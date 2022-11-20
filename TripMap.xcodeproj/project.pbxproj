@@ -28,6 +28,7 @@
 
 /* Begin PBXFileReference section */
 		42008E4C279851DE00E591B6 /* Place.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Place.swift; sourceTree = "<group>"; };
+		4245865A28E598E700CFC8B5 /* TripMap.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = TripMap.entitlements; sourceTree = "<group>"; };
 		42717E1228A795FD0005EFBD /* ListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListViewModel.swift; sourceTree = "<group>"; };
 		428B527E27F059760081FCE7 /* ListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListView.swift; sourceTree = "<group>"; };
 		428B528027F0599D0081FCE7 /* Site.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Site.swift; sourceTree = "<group>"; };
@@ -87,6 +88,7 @@
 		42DCFDCF27981A4000CC02CD /* TripMap */ = {
 			isa = PBXGroup;
 			children = (
+				4245865A28E598E700CFC8B5 /* TripMap.entitlements */,
 				42008E4B279851CA00E591B6 /* Model */,
 				42DCFDE427981AE000CC02CD /* ViewModel */,
 				42DCFDE327981ADB00CC02CD /* View */,
@@ -342,6 +344,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = TripMap/TripMap.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"TripMap/Preview Content\"";
@@ -373,6 +376,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = TripMap/TripMap.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"TripMap/Preview Content\"";
