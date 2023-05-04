@@ -8,18 +8,22 @@ import SwiftUI
 import MapKit
 import CoreData
 
-public class Site: NSManagedObject {
+public class Site: NSManagedObject, Identifiable {
 
     @NSManaged public var address: String
     @NSManaged public var content: String
     @NSManaged public var coverImage: Data
+    @NSManaged public var hackMDUrl: String
     @NSManaged public var id: String
     @NSManaged public var latitude: Double
     @NSManaged public var longitude: Double
     @NSManaged public var name: String
     @NSManaged public var star: Int64
     @NSManaged public var time: Date
-    @NSManaged public var project: Project
+    
+    func toSiteViewModel() -> SiteViewModel {
+        return SiteViewModel(site: self)
+    }
     
 }
 

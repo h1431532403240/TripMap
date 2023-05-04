@@ -16,19 +16,15 @@ struct ListView: View {
         entity: Site.entity(),
         sortDescriptors: [NSSortDescriptor(keyPath: \Site.time, ascending: false)])
     var Sites: FetchedResults<Site>
-    
-    @State var selectedPlace = [Int]()
-        
+            
     var body: some View {
-        NavigationStack(path: $selectedPlace) {
+        NavigationStack {
             List {
                 ForEach(Sites.indices, id: \.self) { place in
                     ZStack {
-//                        NavigationLink(destination: PlaceView(placeContent: Sites[place]), isActive: 1) {
-//                            EmptyView()
-//                        }
-                        NavigationLink(Sites[place].name, value: 1)
-                            .opacity(0)
+                        NavigationLink(destination: PlaceViwePageView(text: Sites[place].content, title: Sites[place].name)) {
+                            EmptyView()
+                        }
                         someList(place: Sites[place])
                         // 左滑選項
                             .swipeActions(edge: .trailing, allowsFullSwipe: false) {
@@ -44,24 +40,24 @@ struct ListView: View {
                                     Label("刪除", systemImage: "trash")
                                 }
                                 .tint(.red)
-                                Button {
-                                    self.selectedPlace.append(1)
-                                    print("編輯")
-                                } label: {
+                                NavigationLink(destination: PlaceEditView(placeContent: Sites[place].toSiteViewModel())) {
                                     Label("編輯", systemImage: "square.and.pencil")
                                 }
                                 .tint(Color("設置顏色深"))
+//
+//                                Button {
+//                                    print("編輯")
+//                                } label: {
+//
+//                                }
+//                                .tint(Color("設置顏色深"))
                             }
                     }
-                    .navigationDestination(for: Int.self) { target in
-                        switch target {
-                        case 1:
-                            PlaceView(placeContent: Sites[place])
-                        default:
-                            EmptyView()
-                        }
-                    }
                 }
+            }
+            .refreshable {
+                print("refresh!")
+//                context.refreshAllObjects()
             }
             .navigationTitle("儲存地點")
             .navigationBarTitleDisplayMode(.automatic)
@@ -70,7 +66,14 @@ struct ListView: View {
                     Button(action: {
                         dismiss()
                     }) {
-                        Text("關閉")
+                        Image(systemName: "xmark")
+                            .fontWeight(.heavy)
+                            .font(.headline)
+                            .padding(6)
+                            .foregroundColor(.white)
+                            .background(.gray)
+                            .cornerRadius(100.0)
+                            .padding([.top, .trailing], 20.0)
                     }
                 }
             }
@@ -84,15 +87,25 @@ struct someList: View {
     var body: some View {
         HStack {
             VStack {
-                if let imageData = place.coverImage {
-                    Image(uiImage: UIImage(data: imageData) ?? UIImage())
+//                if let imageData = place.coverImage {
+//                    Image(uiImage: UIImage(data: imageData) ?? UIImage())
+//                        .resizable()
+//                        .scaledToFill()
+//                        .frame(width: 80, height: 80)
+//                        .cornerRadius(25)
+//                } else {
+//                    noneImageView
+//                }
+                if place.coverImage.isEmpty {
+                    noneImageView
+                } else {
+                    Image(uiImage: UIImage(data: place.coverImage) ?? UIImage())
                         .resizable()
                         .scaledToFill()
                         .frame(width: 80, height: 80)
                         .cornerRadius(25)
-                } else {
-                    noneImageView
                 }
+                
             }
             .padding([.top, .bottom], 5.0)
             VStack(alignment: .leading) {

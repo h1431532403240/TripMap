@@ -1,26 +1,16 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="21279" systemVersion="21G72" minimumToolsVersion="Automatic" sourceLanguage="Swift" usedWithCloudKit="YES" userDefinedModelVersionIdentifier="">
-    <entity name="Project" representedClassName=".Project" syncable="YES">
-        <attribute name="emoji" optional="YES" attributeType="String"/>
-        <attribute name="play" optional="YES" attributeType="String"/>
-        <relationship name="site" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Site" inverseName="project" inverseEntity="Site"/>
-        <uniquenessConstraints>
-            <uniquenessConstraint>
-                <constraint value="play"/>
-            </uniquenessConstraint>
-        </uniquenessConstraints>
-    </entity>
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="21754" systemVersion="22E261" minimumToolsVersion="Automatic" sourceLanguage="Swift" usedWithCloudKit="YES" userDefinedModelVersionIdentifier="">
     <entity name="Site" representedClassName=".Site" syncable="YES">
         <attribute name="address" optional="YES" attributeType="String"/>
         <attribute name="content" optional="YES" attributeType="String"/>
         <attribute name="coverImage" optional="YES" attributeType="Binary"/>
+        <attribute name="hackMDUrl" optional="YES" attributeType="String"/>
         <attribute name="id" optional="YES" attributeType="String"/>
         <attribute name="latitude" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
         <attribute name="longitude" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
         <attribute name="name" optional="YES" attributeType="String"/>
         <attribute name="star" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="time" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
-        <relationship name="project" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Project" inverseName="site" inverseEntity="Project"/>
         <uniquenessConstraints>
             <uniquenessConstraint>
                 <constraint value="id"/>

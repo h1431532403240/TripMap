@@ -8,39 +8,80 @@
 import SwiftUI
 import CoreLocation
 import CoreData
+import MapKit
 
 struct Home: View {
     
     @StateObject var mapData = MapViewModel()
     
     @Environment(\.managedObjectContext) var context
-        
+    
+    @FetchRequest(
+        entity: Site.entity(),
+        sortDescriptors: [NSSortDescriptor(keyPath: \Site.time, ascending: false)])
+    var Sites: FetchedResults<Site>
+    
     @State var locationManager = CLLocationManager()
+    
+    @State var centerAddress: String = ""
     
     @State var isEditing = false
     
+    @State var savePlace = SiteViewModel()
+    
     @State private var ListViewSheet = false
-
+    
     @State private var PlaceViewSheet = false
+    
+    @State private var UserSettingViewSheet = false
+    
+    @State private var regionDidChangeAnimated = false
+    
+    @State private var isClickAnnotation: Bool = false
+    
+    @State private var isClickCheckButton: Bool = false
+    
+    @State private var placeContent = SiteViewModel()
     
     var body: some View {
         
         ZStack {
             
-            // 地圖顯示
-            MapView()
-                .environmentObject(mapData)
-                .ignoresSafeArea(.all, edges: .all)
+            Map(coordinateRegion: $mapData.mapRegion,
+                showsUserLocation: true,
+                annotationItems: Sites,
+                annotationContent: { location in
+                MapAnnotation(coordinate: CLLocationCoordinate2D(latitude: location.latitude, longitude: location.longitude)) {
+                    LocationMapAnnotationView(placeContent: location.toSiteViewModel())
+                }
+            })
+            .ignoresSafeArea()
             
             // 搜尋列
             VStack() {
                 searchBar(mapData: mapData, isEditing: isEditing)
+                
                 Spacer()
+                
             }
             .padding()
             
             Image(systemName: "pin.fill")
                 .foregroundColor(.red)
+                .offset(y: regionDidChangeAnimated ? -20: -10)
+                .onChange(of: mapData.mapRegion) { newRegion in
+                    regionDidChangeAnimated = true
+                    
+                    let delay = 0.3
+                    DispatchQueue.global().asyncAfter(deadline: .now() + delay) {
+                        
+                        if newRegion == mapData.mapRegion {
+                            withAnimation(.easeInOut(duration: 0.5)) {
+                                regionDidChangeAnimated = false
+                            }
+                        }
+                    }
+                }
             
             VStack {
                 
@@ -51,18 +92,9 @@ struct Home: View {
                     
                     // 測試按鈕
                     Button(action: {
-                        
+                        print(mapData.mapRegion)
                     }) {
                         Image(systemName: "hammer")
-                            .font(.title2)
-                            .padding(4.7)
-                            .background(Color.white)
-                            .cornerRadius(10.0)
-                    }
-                    
-                    // 切換地圖按鈕
-                    Button(action: mapData.updateMapType) {
-                        Image(systemName: mapData.mapType == .standard ? "network" : "map")
                             .font(.title2)
                             .padding(4.7)
                             .background(Color.white)
@@ -78,7 +110,6 @@ struct Home: View {
                             .cornerRadius(10.0)
                         
                     }
-                    
                 }
                 .frame(maxWidth: .infinity, alignment: .trailing)
                 .padding()
@@ -91,17 +122,19 @@ struct Home: View {
                     }, label: {
                         Image(systemName: "list.bullet.rectangle")
                     })
-                        .frame(maxWidth: .infinity)
-
+                    .frame(maxWidth: .infinity)
+                    
                     Text("")
                         .frame(maxWidth: .infinity)
                     
                     // 個人頁面
-                    Button(action:{}, label: {
+                    Button(action:{
+                        self.UserSettingViewSheet = true
+                    }, label: {
                         Image(systemName: "person.circle")
                     })
-                        .frame(maxWidth: .infinity)
-
+                    .frame(maxWidth: .infinity)
+                    
                 }
                 .font(.largeTitle)
                 .foregroundColor(.black)
@@ -110,17 +143,23 @@ struct Home: View {
                     ListView()
                         .interactiveDismissDisabled()
                 }
-
+                .sheet(isPresented: $UserSettingViewSheet) {
+                    UserSettingView()
+                        .interactiveDismissDisabled()
+                }
+                
                 // 「設置」button
                 .overlay(
                     Button(action:{
+                        savePlace = SavePlace()
+                        print(String(savePlace.latitude) + ", " + String(savePlace.longitude))
                         self.PlaceViewSheet = true
                     }, label: {
                         VStack(spacing: 5.0) {
                             Text("設   置")
                                 .font(.body)
                                 .fontWeight(.bold)
-
+                            
                             Image(systemName: "list.bullet")
                                 .font(.system(size: 50.0, weight: .bold))
                         }
@@ -128,19 +167,17 @@ struct Home: View {
                         .padding(20.0)
                         .foregroundColor(Color.white)
                     })
-                        .background(LinearGradient(gradient: Gradient(colors: [Color("設置顏色淺"), Color("設置顏色深")]), startPoint: .topLeading, endPoint: .bottomTrailing))
-                        .clipShape(Circle())
-                        .offset(y: -40.0)
+                    .background(LinearGradient(gradient: Gradient(colors: [Color("設置顏色淺"), Color("設置顏色深")]), startPoint: .topLeading, endPoint: .bottomTrailing))
+                    .clipShape(Circle())
+                    .offset(y: -40.0)
+                    .sheet(isPresented: $PlaceViewSheet) {
+                        PlaceEditView(placeContent: savePlace, add: true)
+                            .interactiveDismissDisabled()
+                    }
                 )
                 .frame(maxWidth: .infinity)
                 .background(.white)
-                .sheet(isPresented: $PlaceViewSheet) {
-                    PlaceView(placeContent: SavePlace(), add: true)
-                    .interactiveDismissDisabled()
-                }
-                
             }
-            
         }
         
         // 開啟ZStack時運作
@@ -149,7 +186,6 @@ struct Home: View {
             // 設置委託
             locationManager.delegate = mapData
             locationManager.requestWhenInUseAuthorization()
-            
         })
         
         // 處理拒絕定位權限
@@ -179,30 +215,25 @@ struct Home: View {
         })
     }
     
-    private func SavePlace() -> Site {
-        let site = NSEntityDescription.insertNewObject(forEntityName: "Site", into: context) as! Site
+    private func SavePlace() -> SiteViewModel {
+        //        let site = NSEntityDescription.insertNewObject(forEntityName: "Site", into: context) as! Site
+        let site = SiteViewModel()
         
-        let longitude = mapData.mapView.centerCoordinate.longitude
-        let latitude = mapData.mapView.centerCoordinate.latitude
-                
-//        mapData.getAddress(location: CLLocation(latitude: latitude, longitude: longitude)) { (address) in
-//            site.address = address
-//            print(site.address)
-//        }
-                
-        site.address = mapData.address
+        let longitude = mapData.mapRegion.center.longitude
+        let latitude = mapData.mapRegion.center.latitude
+        
+        site.address = centerAddress
         site.id = UUID().uuidString
         site.longitude = longitude
         site.latitude = latitude
+        site.address = ""
+        site.hackMDUrl = ""
         site.coverImage = UIImage(named: "Cat")!.pngData()!
         site.time = Date()
         site.name = ""
         site.star = 0
         site.content = ""
         
-        
-        print(site)
-
         return site
     }
 }
@@ -289,6 +320,16 @@ struct searchBar: View {
     }
 }
 
+// 比較不同Coordinate
+extension MKCoordinateRegion: Equatable {
+    public static func == (lhs: MKCoordinateRegion, rhs: MKCoordinateRegion) -> Bool {
+        if lhs.center.latitude == rhs.center.latitude && lhs.span.latitudeDelta == rhs.span.latitudeDelta && lhs.span.longitudeDelta == rhs.span.longitudeDelta {
+            return true
+        } else {
+            return false
+        }
+    }
+}
 
 struct Home_Previews: PreviewProvider {
     static var previews: some View {

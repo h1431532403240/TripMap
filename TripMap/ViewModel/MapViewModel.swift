@@ -12,8 +12,14 @@ import Contacts
 
 // 所有Map資料
 class MapViewModel: NSObject, ObservableObject, CLLocationManagerDelegate {
-        
-    @Published var mapView = MKMapView()
+    
+    @Environment(\.dismiss) var dismiss
+            
+    // 地圖位置
+    let mapSpan = MKCoordinateSpan(latitudeDelta: 0.01, longitudeDelta: 0.01)
+    @Published var mapRegion: MKCoordinateRegion = MKCoordinateRegion(center: CLLocationCoordinate2D(latitude: 23.02353, longitude: 120.22478), span: MKCoordinateSpan(latitudeDelta: 0.01, longitudeDelta: 0.01))
+            
+    @Published var userLocation = CLLocationCoordinate2D()
     
     // 預設地點
     @Published var region: MKCoordinateRegion!
@@ -30,37 +36,15 @@ class MapViewModel: NSObject, ObservableObject, CLLocationManagerDelegate {
     // 搜索地點儲存
     @Published var places: [Place] = []
     
-    typealias CompletionHandler = (_ success:Bool) -> Void
-    
     @Published var centerLocation: CLLocationCoordinate2D?
 
     @Published var address: String = ""
     
-    // 變更地圖類型
-    func updateMapType() {
-        
-        if mapType == .standard {
-            mapType = .hybrid
-            mapView.mapType = mapType
-        } else {
-            mapType = .standard
-            mapView.mapType = mapType
-        }
-    }
-    
-//    // 獲取地圖中心經緯度
-//    func getCenterLocation() -> CLLocationCoordinate2D {
-//        centerLocation = mapView.centerCoordinate
-//        return centerLocation!
-//    }
-    
-    // 獲取地圖中心經緯度、地址
-    func getCenterLocation() {
-        centerLocation = mapView.centerCoordinate
-        getAddress(location: CLLocation(latitude: centerLocation!.latitude, longitude: centerLocation!.longitude)) { (address) in
-            self.address = address
-            print(self.centerLocation!)
-            print(address)
+    func updateMapRegion(location: CLLocationCoordinate2D) {
+        withAnimation(.easeInOut) {
+            mapRegion = MKCoordinateRegion(
+                center: location,
+                span: mapSpan)
         }
     }
 
@@ -69,15 +53,16 @@ class MapViewModel: NSObject, ObservableObject, CLLocationManagerDelegate {
         
         geoCoder.reverseGeocodeLocation(location, preferredLocale: Locale(identifier: "zh_TW")) { placemark, error in
             guard let placemark = placemark?.first, error == nil else { return }
-            var address: String = ""
-            address += placemark.country ?? ""
-            address += placemark.administrativeArea ?? ""
-            address += placemark.subAdministrativeArea ?? ""
-            address += placemark.locality ?? ""
-            address += placemark.subLocality ?? ""
-            address += placemark.thoroughfare ?? ""
-            address += placemark.subThoroughfare ?? ""
-            address += "號"
+            guard let address = placemark.getFullAddress() else { return }
+//            var address: String = ""
+//            address += placemark.country ?? ""
+//            address += placemark.administrativeArea ?? ""
+//            address += placemark.subAdministrativeArea ?? ""
+//            address += placemark.locality ?? ""
+//            address += placemark.subLocality ?? ""
+//            address += placemark.thoroughfare ?? ""
+//            address += placemark.subThoroughfare ?? ""
+//            address += "號"
 
             print("經度：\(String(describing: location.coordinate.longitude) ), 緯度：\(String(describing: location.coordinate.latitude))")
             completion(address)
@@ -86,13 +71,7 @@ class MapViewModel: NSObject, ObservableObject, CLLocationManagerDelegate {
     
     // 前往個人定位
     func currentLocation() {
-                
-        guard let userLocation = mapView.userLocation.location?.coordinate else { return }
-        
-        region.center = userLocation
-                
-        mapView.setRegion(region, animated: true)
-        mapView.setVisibleMapRect(mapView.visibleMapRect, animated: true)
+        self.updateMapRegion(location: self.userLocation)
     }
     
     // 搜尋地點
@@ -119,20 +98,7 @@ class MapViewModel: NSObject, ObservableObject, CLLocationManagerDelegate {
         
         guard let coordinate = place.place.location?.coordinate else { return }
         
-        let pointAnnotation = MKPointAnnotation()
-        pointAnnotation.coordinate = coordinate
-        pointAnnotation.title = place.place.name ?? "沒有名稱"
-        
-        // 刪除其他搜尋資料
-        mapView.removeAnnotations(mapView.annotations)
-        
-        mapView.addAnnotation(pointAnnotation)
-        
-        // 地圖移動至搜尋地點
-        let corrdinateRegion = MKCoordinateRegion(center: coordinate, latitudinalMeters: 500, longitudinalMeters: 500)
-        
-        mapView.setRegion(corrdinateRegion, animated: true)
-        mapView.setVisibleMapRect(mapView.visibleMapRect, animated: true)
+        updateMapRegion(location: coordinate)
     }
     
     // 確認定位服務是否開啟
@@ -164,23 +130,9 @@ class MapViewModel: NSObject, ObservableObject, CLLocationManagerDelegate {
         
         guard let location = locations.last else { return }
         
-        self.region = MKCoordinateRegion(center: location.coordinate, latitudinalMeters: 1000, longitudinalMeters: 1000)
+        self.userLocation = location.coordinate
         
-        // 更新地圖
-        self.mapView.setRegion(self.region, animated: true)
-        
-        // 滑順動畫
-        self.mapView.setVisibleMapRect(self.mapView.visibleMapRect, animated: true)
+        self.updateMapRegion(location: userLocation)
     }
     
-}
-
-extension CLGeocoder {
-    
-}
-
-extension MapViewModel: MKMapViewDelegate {
-    func mapView(_ mapView: MKMapView, regionDidChangeAnimated animated: Bool) {
-        getCenterLocation()
-    }
 }
