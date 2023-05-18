@@ -114,7 +114,7 @@ struct MarkDownEditorView: View {
                                             switch response.result {
                                             case .success(let result):
                                                 print(result.data.link)
-                                                text += "![圖片標題](\(result.data.link))"
+                                                text += "\n![圖片標題](\(result.data.link))"
                                             case .failure(let error):
                                                 uploadImageFailed = true
                                                 print(error)

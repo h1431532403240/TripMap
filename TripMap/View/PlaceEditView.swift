@@ -246,9 +246,28 @@ struct PlaceEditView: View {
 
                 }
                 
-                MiniMap(placeContent: placeContent)
-                    .cornerRadius(20)
-                    .frame(height: 150)
+                ZStack(alignment: .bottomTrailing) {
+                    MiniMap(placeContent: placeContent)
+                        .cornerRadius(20)
+                        .frame(height: 150)
+                    Button {
+                        let coords = CLLocationCoordinate2DMake(placeContent.latitude, placeContent.longitude)
+                        
+                        let place = MKPlacemark(coordinate: coords)
+                        
+                        let mapItem = MKMapItem(placemark: place)
+                        mapItem.name = placeContent.name
+                        mapItem.openInMaps(launchOptions: nil)
+                    } label: {
+                        Label("導航至此", systemImage: "location.fill")
+                            .padding(.vertical, 5)
+                            .padding(.horizontal, 8.0)
+                            .background(Color("設置顏色深"))
+                            .cornerRadius(20)
+                            .foregroundColor(.white)
+                    }
+                    .padding(10)
+                }
                 
                 // 心得板塊
                 VStack(alignment: .leading, spacing: 10.0) {
@@ -326,7 +345,7 @@ struct PlaceEditView: View {
     
     private func save() {
         
-        var site = Site()
+        var site: Site
         
         //        let fetchSite: NSFetchRequest<Site> = Site.fetchRequest()
         let fetchSite = NSFetchRequest<NSFetchRequestResult>(entityName: "Site")

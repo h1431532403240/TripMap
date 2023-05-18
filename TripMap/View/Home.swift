@@ -57,14 +57,6 @@ struct Home: View {
             })
             .ignoresSafeArea()
             
-            // 搜尋列
-            VStack() {
-                searchBar(mapData: mapData, isEditing: isEditing)
-                
-                Spacer()
-                
-            }
-            .padding()
             
             Image(systemName: "pin.fill")
                 .foregroundColor(.red)
@@ -82,6 +74,15 @@ struct Home: View {
                         }
                     }
                 }
+            
+            // 搜尋列
+            VStack() {
+                searchBar(mapData: mapData, isEditing: isEditing)
+                
+                Spacer()
+                
+            }
+            .padding()
             
             VStack {
                 
@@ -219,13 +220,10 @@ struct Home: View {
         //        let site = NSEntityDescription.insertNewObject(forEntityName: "Site", into: context) as! Site
         let site = SiteViewModel()
         
-        let longitude = mapData.mapRegion.center.longitude
-        let latitude = mapData.mapRegion.center.latitude
-        
         site.address = centerAddress
         site.id = UUID().uuidString
-        site.longitude = longitude
-        site.latitude = latitude
+        site.longitude = mapData.mapRegion.center.longitude
+        site.latitude = mapData.mapRegion.center.latitude
         site.address = ""
         site.hackMDUrl = ""
         site.coverImage = UIImage(named: "Cat")!.pngData()!

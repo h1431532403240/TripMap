@@ -12,6 +12,10 @@ struct ListView: View {
     @Environment(\.dismiss) var dismiss
     @Environment(\.managedObjectContext) var context
     
+    @State private var searchText = ""
+    
+    @State private var placeContent = [SiteViewModel()]
+    
     @FetchRequest(
         entity: Site.entity(),
         sortDescriptors: [NSSortDescriptor(keyPath: \Site.time, ascending: false)])
@@ -44,20 +48,13 @@ struct ListView: View {
                                     Label("編輯", systemImage: "square.and.pencil")
                                 }
                                 .tint(Color("設置顏色深"))
-//
-//                                Button {
-//                                    print("編輯")
-//                                } label: {
-//
-//                                }
-//                                .tint(Color("設置顏色深"))
                             }
                     }
                 }
             }
             .refreshable {
                 print("refresh!")
-//                context.refreshAllObjects()
+                searchText = ""
             }
             .navigationTitle("儲存地點")
             .navigationBarTitleDisplayMode(.automatic)
@@ -77,6 +74,12 @@ struct ListView: View {
                     }
                 }
             }
+        }
+        .searchable(text: $searchText, placement: .navigationBarDrawer(displayMode: .always), prompt: "搜尋地點")
+        .onChange(of: searchText) { searchText in
+            let predicate = searchText.isEmpty ? NSPredicate(value: true) : NSPredicate(format: "name CONTAINS[c] %@ OR address CONTAINS[c] %@", searchText, searchText)
+            
+            Sites.nsPredicate = predicate
         }
     }
 }
